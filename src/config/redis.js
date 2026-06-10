@@ -1,0 +1,1 @@
+module.exports = { redisClient: null, connectRedis: async () => {} };

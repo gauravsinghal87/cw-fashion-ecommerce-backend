@@ -1,0 +1,2 @@
+const { body } = require('express-validator');
+exports.orderValidator = [ body('items').isArray({ min: 1 }), body('shippingAddress').notEmpty(), body('paymentMethod').isIn(['cod', 'razorpay', 'wallet']) ];

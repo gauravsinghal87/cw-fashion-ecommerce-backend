@@ -1,0 +1,1 @@
+module.exports = { PENDING: 'pending', PAID: 'paid', FAILED: 'failed', REFUNDED: 'refunded', COD: 'cod', RAZORPAY: 'razorpay', WALLET: 'wallet' };

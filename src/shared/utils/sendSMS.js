@@ -1,0 +1,1 @@
+module.exports = async (phone, message) => { console.log(`[SMS] To ${phone}: ${message}`); };

@@ -1,0 +1,1 @@
+module.exports = { CUSTOMER: 'customer', VENDOR: 'vendor', ADMIN: 'admin', SUBADMIN: 'subadmin' };
