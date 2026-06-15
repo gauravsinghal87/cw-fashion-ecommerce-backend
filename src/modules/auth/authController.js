@@ -191,7 +191,7 @@ const logout = async (req, res, next) => {
           user.sessions = [];
           await user.save();
         }
-      } catch (_) {}
+      } catch (_) { }
     }
     res.json({ success: true, message: 'Logged out successfully' });
   } catch (error) {
