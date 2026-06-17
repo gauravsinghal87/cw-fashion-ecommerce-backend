@@ -277,7 +277,7 @@ const createOrder = async (req, res, next) => {
       const vendor = await Vendor.findById(item.vendor);
       if (vendor) {
         vendor.totalOrders += 1;
-        await vendor.save();
+        await vendor.save({ validateBeforeSave: false });
       }
     }
 

@@ -20,7 +20,7 @@ const createProduct = async (req, res, next) => {
     const product = await Product.create(productData);
 
     vendor.totalProducts += 1;
-    await vendor.save();
+    await vendor.save({ validateBeforeSave: false });
 
     res.status(201).json({ success: true, product });
   } catch (error) {
@@ -132,7 +132,7 @@ const deleteProduct = async (req, res, next) => {
     if (req.user.role === 'vendor') {
       const vendor = await Vendor.findOne({ user: req.user._id });
       vendor.totalProducts = Math.max(0, vendor.totalProducts - 1);
-      await vendor.save();
+      await vendor.save({ validateBeforeSave: false });
     }
 
     res.json({ success: true, message: 'Product deleted' });
@@ -313,7 +313,7 @@ const addReview = async (req, res, next) => {
       const products = await Product.find({ vendor: product.vendor });
       vendor.storeRating = products.length ? products.reduce((s, p) => s + p.rating, 0) / products.length : 0;
       vendor.totalRatings = products.reduce((s, p) => s + p.numRatings, 0);
-      await vendor.save();
+      await vendor.save({ validateBeforeSave: false });
     }
     res.status(201).json({ success: true, review });
   } catch (error) { next(error); }
