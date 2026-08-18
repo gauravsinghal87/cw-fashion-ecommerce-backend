@@ -18,7 +18,7 @@ const { generateToken, generateRefreshToken } = require('../../shared/utils/gene
 
 const registerVendor = async (req, res, next) => {
   try {
-    const { name, email, password, phone, storeName, panNumber, aadhaarNumber, bankAccount, ifscCode, upiId } = req.body;
+    const { name, email, password, phone, storeName, panNumber, aadhaarNumber, bankName, bankAccount, ifscCode, upiId } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -47,7 +47,7 @@ const registerVendor = async (req, res, next) => {
       bankAccount: {
         accountHolderName: name, // Use the user's name as account holder name
         accountNumber: bankAccount?.trim() || '',
-        bankName: '', // Will need to be updated by user later
+        bankName: bankName?.trim() || '',
         ifscCode: ifscCode?.trim() || '',
         accountType: 'Saving', // Default to saving account
         upiId: upiId?.trim() || '',
