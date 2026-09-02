@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../../shared/middleware/auth');
 const validate = require('../../shared/middleware/validation');
-const { profileUpdateValidator, addressValidator } = require('./validators');
+const { profileUpdateValidator, addressValidator, deleteAccountValidator } = require('./validators');
 const {
   updateProfile,
   getAddresses,
@@ -27,6 +27,6 @@ router.get('/wishlist', protect, getWishlist);
 router.post('/wishlist/:productId', protect, addToWishlist);
 router.delete('/wishlist/:productId', protect, removeFromWishlist);
 router.delete('/wishlist', protect, clearWishlist);
-router.delete('/account', protect, deleteAccount);
+router.delete('/account', protect, deleteAccountValidator, validate, deleteAccount);
 
 module.exports = router;

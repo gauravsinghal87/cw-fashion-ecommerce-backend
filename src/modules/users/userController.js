@@ -1,5 +1,10 @@
 const User = require('../users/User');
 const Product = require('../products/Product');
+const { Wallet } = require('../wallets/Wallet');
+const Cart = require('../carts/Cart');
+const Order = require('../orders/Order');
+const Review = require('../reviews/Review');
+const Return = require('../returns/Return');
 
 const updateProfile = async (req, res, next) => {
   try {
@@ -166,8 +171,34 @@ const clearWishlist = async (req, res, next) => {
 
 const deleteAccount = async (req, res, next) => {
   try {
-    await User.findByIdAndUpdate(req.user._id, { isActive: false });
-    res.json({ success: true, message: 'Account deactivated' });
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({ success: false, message: 'Password is required to delete your account' });
+    }
+
+    const user = await User.findById(req.user._id).select('+password');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    const isMatch = await user.comparePassword(password);
+    if (!isMatch) {
+      return res.status(400).json({ success: false, message: 'Incorrect password' });
+    }
+
+    const userId = user._id;
+
+    await Promise.allSettled([
+      Wallet.deleteOne({ user: userId }),
+      Cart.deleteOne({ user: userId }),
+      Order.deleteMany({ user: userId }),
+      Review.deleteMany({ user: userId }),
+      Return.deleteMany({ user: userId }),
+      User.deleteOne({ _id: userId }),
+    ]);
+
+    res.json({ success: true, message: 'Account permanently deleted' });
   } catch (error) {
     next(error);
   }
